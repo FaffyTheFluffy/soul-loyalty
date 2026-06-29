@@ -3,81 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOUL — Admin Fidélité</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>SŌUL — Admin Fidélité</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --cream: #F7F3EE; --espresso: #1C1410; --caramel: #C8894A; --latte: #D9BFA0; --fog: #EDE8E2; --text-soft: #6B5D52; }
-    body { background: var(--cream); color: var(--espresso); font-family: 'Inter', sans-serif; min-height: 100vh; }
+    :root { --yellow: #F2EA3C; --black: #0A0A0A; --white: #FFFFFF; --light: #F5F5F5; --text-muted: #888; --border: #E0E0E0; }
+    body { background: var(--white); color: var(--black); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
 
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--latte); background: var(--espresso); color: var(--cream); }
-    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--latte); }
-    .topbar-links a { font-size: 11px; color: var(--latte); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; margin-left: 20px; }
+    .header { background: var(--white); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .header-logo { height: 32px; width: auto; }
+    .header-links a { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; margin-left: 20px; }
+    .header-links a:hover { color: var(--black); }
 
-    .main { padding: 32px 24px; max-width: 900px; margin: 0 auto; }
+    .hero-band { background: var(--yellow); padding: 14px 24px; }
+    .hero-text { font-size: 13px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* Stats */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
-    .stat-card { background: var(--espresso); color: var(--cream); padding: 24px 20px; }
-    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--caramel); line-height: 1; }
-    .stat-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--latte); margin-top: 6px; }
+    .main { padding: 32px 24px; max-width: 960px; margin: 0 auto; }
 
-    /* Section */
-    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .section-title { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); }
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
+    .stat-card { background: var(--light); border-left: 4px solid var(--yellow); padding: 20px 18px; }
+    .stat-value { font-size: 40px; font-weight: 900; font-style: italic; color: var(--black); line-height: 1; }
+    .stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
 
-    /* Table */
+    /* SECTION */
+    .section-title { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* TABLE */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
-    th { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--latte); }
-    td { padding: 14px 12px; font-size: 13px; border-bottom: 1px solid var(--fog); vertical-align: top; }
-    tr:hover td { background: var(--fog); }
-    .client-full { font-weight: 500; }
-    .client-meta { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
-    .badge-visits { display: inline-block; background: var(--espresso); color: var(--caramel); font-size: 11px; font-weight: 600; padding: 3px 8px; }
-    .btn-detail { font-size: 11px; color: var(--caramel); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
-    .btn-deactivate { font-size: 11px; color: #c00; background: none; border: none; cursor: pointer; padding: 0; margin-left: 12px; }
+    th { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); padding: 10px 12px; text-align: left; border-bottom: 1.5px solid var(--border); }
+    td { padding: 14px 12px; font-size: 13px; border-bottom: 1px solid var(--light); vertical-align: top; }
+    tr:hover td { background: var(--light); }
+    .client-full { font-weight: 700; font-size: 13px; }
+    .client-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 400; }
+    .badge-visits { display: inline-block; background: var(--yellow); color: var(--white); font-size: 11px; font-weight: 800; font-style: italic; padding: 3px 10px; }
+    .btn-detail { font-size: 10px; font-weight: 700; color: var(--black); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; letter-spacing: 0.05em; }
+    .btn-deactivate { font-size: 10px; font-weight: 700; color: #cc0000; background: none; border: none; cursor: pointer; padding: 0; margin-left: 12px; letter-spacing: 0.05em; }
 
-    /* Modal historique */
-    #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    /* MODAL */
+    #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
     #modal.open { display: flex; }
-    .modal-box { background: var(--cream); max-width: 560px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 28px; }
-    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; margin-bottom: 4px; }
-    .modal-sub { font-size: 12px; color: var(--text-soft); margin-bottom: 24px; }
-    .visit-item { padding: 14px 0; border-bottom: 1px solid var(--fog); }
-    .visit-date { font-size: 12px; font-weight: 500; letter-spacing: 0.05em; }
-    .visit-products { font-size: 13px; color: var(--espresso); margin-top: 3px; }
-    .visit-amount { font-size: 12px; color: var(--caramel); font-weight: 600; margin-top: 2px; }
-    .modal-close { margin-top: 20px; padding: 12px 24px; background: var(--espresso); color: var(--cream); border: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
-    .no-visits { font-size: 13px; color: var(--text-soft); font-style: italic; }
-
-    .loading { text-align: center; padding: 40px; color: var(--text-soft); font-size: 13px; }
+    .modal-box { background: var(--white); max-width: 560px; width: 100%; max-height: 80vh; overflow-y: auto; }
+    .modal-header { background: var(--yellow); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: clamp(20px, 5vw, 28px); font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: -0.01em; }
+    .modal-sub { font-size: 10px; font-weight: 700; color: var(--white); letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; }
+    .modal-body { padding: 24px; }
+    .visit-item { padding: 14px 0; border-bottom: 1px solid var(--light); }
+    .visit-date { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
+    .visit-products { font-size: 13px; font-weight: 600; color: var(--black); margin-top: 3px; }
+    .visit-amount { font-size: 13px; font-weight: 800; font-style: italic; color: var(--black); margin-top: 2px; }
+    .modal-close { margin-top: 20px; padding: 14px 24px; background: var(--black); color: var(--yellow); border: none; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
+    .no-visits { font-size: 13px; color: var(--text-muted); font-style: italic; }
+    .loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px; font-weight: 500; }
   </style>
 </head>
 <body>
 
-<div class="topbar">
-  <span class="topbar-logo">Soul — Admin Fidélité</span>
-  <div>
+<div class="header">
+  <img src="/SOUL_LOGO_noir.png" alt="SŌUL" class="header-logo">
+  <div class="header-links">
     <a href="/caisse">Caisse</a>
     <a href="/caisse/logout">Déconnexion</a>
   </div>
 </div>
 
-<div class="main">
+<div class="hero-band">
+  <p class="hero-text">Admin — Fidélité</p>
+</div>
 
-  <!-- Stats -->
+<div class="main">
   <div class="stats-grid" id="stats-grid">
     <div class="stat-card"><div class="stat-value" id="s-clients">—</div><div class="stat-label">Membres actifs</div></div>
     <div class="stat-card"><div class="stat-value" id="s-visits">—</div><div class="stat-label">Visites totales</div></div>
     <div class="stat-card"><div class="stat-value">−10%</div><div class="stat-label">Remise appliquée</div></div>
   </div>
 
-  <!-- Clients -->
-  <div class="section-header">
-    <p class="section-title">Membres</p>
-  </div>
-
+  <p class="section-title">Membres</p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -96,13 +100,18 @@
   </div>
 </div>
 
-<!-- Modal historique -->
 <div id="modal">
   <div class="modal-box">
-    <p class="modal-title" id="modal-name">—</p>
-    <p class="modal-sub" id="modal-sub">Historique des visites</p>
-    <div id="modal-visits"></div>
-    <button class="modal-close" onclick="closeModal()">Fermer</button>
+    <div class="modal-header">
+      <div>
+        <p class="modal-title" id="modal-name">—</p>
+        <p class="modal-sub" id="modal-sub">Historique des visites</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="modal-visits"></div>
+      <button class="modal-close" onclick="closeModal()">Fermer ×</button>
+    </div>
   </div>
 </div>
 
@@ -118,12 +127,10 @@
     const res = await fetch('/admin/clients');
     const clients = await res.json();
     const tbody = document.getElementById('clients-body');
-
     if (!clients.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-soft);font-size:13px;font-style:italic;padding:20px 12px">Aucun membre inscrit.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);font-size:13px;font-style:italic;padding:20px 12px">Aucun membre inscrit.</td></tr>';
       return;
     }
-
     tbody.innerHTML = clients.map(c => `
       <tr>
         <td>
@@ -131,8 +138,8 @@
           <div class="client-meta">${c.email || ''} ${c.phone ? '· ' + c.phone : ''}</div>
         </td>
         <td><span class="badge-visits">${c.visit_count}</span></td>
-        <td style="font-size:12px;color:var(--text-soft)">${c.last_visit ? formatDate(c.last_visit) : '—'}</td>
-        <td style="font-size:13px;font-weight:500">${c.total_spent ? parseFloat(c.total_spent).toFixed(2) + ' €' : '—'}</td>
+        <td style="font-size:12px;color:var(--text-muted);font-weight:500">${c.last_visit ? formatDate(c.last_visit) : '—'}</td>
+        <td style="font-size:13px;font-weight:700">${c.total_spent ? parseFloat(c.total_spent).toFixed(2) + ' €' : '—'}</td>
         <td>
           <button class="btn-detail" onclick="openModal('${c.id}', '${c.first_name} ${c.last_name}', ${c.visit_count})">Historique</button>
           <button class="btn-deactivate" onclick="deactivate('${c.id}')">Supprimer</button>
@@ -144,18 +151,12 @@
   async function openModal(clientId, name, visits) {
     document.getElementById('modal-name').textContent = name;
     document.getElementById('modal-sub').textContent = `${visits} visite${visits > 1 ? 's' : ''}`;
-    document.getElementById('modal-visits').innerHTML = '<p style="font-size:13px;color:var(--text-soft)">Chargement…</p>';
+    document.getElementById('modal-visits').innerHTML = '<p style="font-size:13px;color:var(--text-muted)">Chargement…</p>';
     document.getElementById('modal').classList.add('open');
-
     const res = await fetch(`/admin/clients/${clientId}/visites`);
     const visits_data = await res.json();
     const container = document.getElementById('modal-visits');
-
-    if (!visits_data.length) {
-      container.innerHTML = '<p class="no-visits">Aucune visite enregistrée.</p>';
-      return;
-    }
-
+    if (!visits_data.length) { container.innerHTML = '<p class="no-visits">Aucune visite enregistrée.</p>'; return; }
     container.innerHTML = visits_data.map(v => `
       <div class="visit-item">
         <div class="visit-date">${formatDateFull(v.visited_at)}</div>
@@ -165,24 +166,16 @@
     `).join('');
   }
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-  }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
   async function deactivate(id) {
-    if (!confirm('Supprimer ce membre ? Cette action est irréversible.')) return;
+    if (!confirm('Supprimer ce membre ?')) return;
     await fetch(`/admin/clients/${id}/desactiver`, { method: 'POST' });
-    loadClients();
-    loadStats();
+    loadClients(); loadStats();
   }
 
-  function formatDate(iso) {
-    return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-  }
-
-  function formatDateFull(iso) {
-    return new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-  }
+  function formatDate(iso) { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  function formatDateFull(iso) { return new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
   loadStats();
   loadClients();
