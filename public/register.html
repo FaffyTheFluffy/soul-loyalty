@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOUL — Carte Privilège</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F3EE;
+      --espresso: #1C1410;
+      --caramel: #C8894A;
+      --latte: #D9BFA0;
+      --fog: #EDE8E2;
+      --text-soft: #6B5D52;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--espresso);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      padding: 40px 24px 0;
+      text-align: center;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .divider-thin {
+      width: 40px;
+      height: 1px;
+      background: var(--caramel);
+      margin: 16px auto;
+    }
+
+    .headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 8vw, 52px);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .headline em {
+      font-style: italic;
+      color: var(--caramel);
+    }
+
+    .subline {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-top: 12px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* Form container */
+    .form-wrap {
+      flex: 1;
+      padding: 40px 24px 60px;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .form-section {
+      margin-bottom: 32px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 16px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    label .required { color: var(--caramel); }
+
+    input, select {
+      width: 100%;
+      padding: 14px 0;
+      border: none;
+      border-bottom: 1px solid var(--latte);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--espresso);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    input:focus, select:focus {
+      border-bottom-color: var(--caramel);
+    }
+
+    input::placeholder { color: var(--latte); }
+
+    select { cursor: pointer; background-image: none; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* RGPD */
+    .rgpd-box {
+      background: var(--fog);
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+
+    .rgpd-text {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .rgpd-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .rgpd-check input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      padding: 0;
+      border: 1px solid var(--latte);
+      background: white;
+      cursor: pointer;
+      margin-top: 1px;
+      accent-color: var(--caramel);
+    }
+
+    .rgpd-check span {
+      font-size: 12px;
+      color: var(--espresso);
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: var(--espresso);
+      color: var(--cream);
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover { background: #2d2018; }
+    .btn-submit:disabled { background: var(--latte); cursor: not-allowed; }
+
+    /* Success screen */
+    #success-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .success-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .success-msg {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    #qr-image {
+      width: 220px;
+      height: 220px;
+      border: 1px solid var(--latte);
+      padding: 12px;
+      background: white;
+      margin-bottom: 24px;
+    }
+
+    .save-hint {
+      font-size: 12px;
+      color: var(--caramel);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .save-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .btn-save {
+      margin-top: 24px;
+      padding: 14px 32px;
+      background: transparent;
+      border: 1px solid var(--espresso);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-save:hover { background: var(--espresso); color: var(--cream); }
+
+    .error-msg {
+      background: #fee;
+      color: #c00;
+      padding: 12px 16px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Formulaire -->
+  <div id="form-screen">
+    <div class="header">
+      <p class="logo">Soul Coffee</p>
+      <div class="divider-thin"></div>
+      <h1 class="headline">Votre carte<br><em>privilège</em></h1>
+      <p class="subline">Réservée à nos amis, partenaires<br>et habitués d'exception.</p>
+    </div>
+
+    <div class="form-wrap">
+      <div class="error-msg" id="error-msg"></div>
+
+      <form id="register-form">
+        <div class="form-section">
+          <p class="section-label">Identité</p>
+          <div class="field-row">
+            <div class="field">
+              <label>Prénom <span class="required">*</span></label>
+              <input type="text" name="first_name" placeholder="Sophie" required>
+            </div>
+            <div class="field">
+              <label>Nom <span class="required">*</span></label>
+              <input type="text" name="last_name" placeholder="Martin" required>
+            </div>
+          </div>
+          <div class="field">
+            <label>Genre</label>
+            <select name="gender">
+              <option value="">Non précisé</option>
+              <option value="F">Femme</option>
+              <option value="M">Homme</option>
+              <option value="NB">Non-binaire</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date de naissance</label>
+            <input type="date" name="birth_date">
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="section-label">Contact</p>
+          <div class="field">
+            <label>Téléphone</label>
+            <input type="tel" name="phone" placeholder="06 00 00 00 00">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="sophie@exemple.fr">
+          </div>
+        </div>
+
+        <div class="rgpd-box">
+          <p class="rgpd-text">
+            Vos données personnelles sont collectées par SOUL Coffee dans le cadre de notre programme de fidélité. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données en nous contactant. Vos données ne seront jamais cédées à des tiers.
+          </p>
+          <label class="rgpd-check">
+            <input type="checkbox" name="rgpd" id="rgpd" required>
+            <span>J'accepte que SOUL Coffee conserve mes données personnelles à des fins de fidélisation. <span class="required">*</span></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          Créer ma carte privilège
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Écran succès -->
+  <div id="success-screen">
+    <p class="logo">Soul Coffee</p>
+    <div class="divider-thin"></div>
+    <p class="success-name" id="success-name">Bienvenue</p>
+    <p class="success-msg">Votre carte privilège est prête.<br>Présentez-la à chaque visite pour bénéficier de <strong>-10%</strong> sur votre commande.</p>
+
+    <img id="qr-image" src="" alt="Votre QR code fidélité">
+
+    <p class="save-hint">↓ Enregistrez ce QR code</p>
+    <p class="save-sub">Appuyez longuement sur l'image<br>et ajoutez-la à vos photos.</p>
+    <button class="btn-save" onclick="downloadQR()">Télécharger le QR code</button>
+  </div>
+
+  <script>
+    let qrDataUrl = '';
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const errEl = document.getElementById('error-msg');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Création en cours…';
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/inscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+          errEl.textContent = json.error || 'Une erreur est survenue.';
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Créer ma carte privilège';
+          return;
+        }
+
+        qrDataUrl = json.qrImageUrl;
+        document.getElementById('qr-image').src = qrDataUrl;
+        document.getElementById('success-name').textContent = `Bonjour, ${json.firstName} !`;
+        document.getElementById('form-screen').style.display = 'none';
+        const ss = document.getElementById('success-screen');
+        ss.style.display = 'flex';
+      } catch (err) {
+        errEl.textContent = 'Erreur de connexion. Réessayez.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Créer ma carte privilège';
+      }
+    });
+
+    function downloadQR() {
+      const a = document.createElement('a');
+      a.href = qrDataUrl;
+      a.download = 'soul-carte-privilege.png';
+      a.click();
+    }
+  </script>
+</body>
+</html>

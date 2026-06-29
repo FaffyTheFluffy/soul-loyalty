@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOUL — Caisse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --cream: #F7F3EE; --espresso: #1C1410; --caramel: #C8894A; --latte: #D9BFA0; --fog: #EDE8E2; --text-soft: #6B5D52; --green: #3d7a5c; }
+    body { background: var(--espresso); color: var(--cream); font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+    /* Top bar */
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px; border-bottom: 1px solid #2d1e18; }
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--latte); }
+    .topbar-links { display: flex; gap: 16px; }
+    .topbar-links a { font-size: 11px; color: var(--latte); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Scanner */
+    .scanner-section { padding: 28px 20px 20px; }
+    .section-title { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 16px; }
+
+    #reader { border-radius: 4px; overflow: hidden; background: #000; max-width: 100%; }
+    #reader video { border-radius: 4px; }
+
+    .scan-alt { margin-top: 16px; display: flex; gap: 10px; }
+    .scan-alt input { flex: 1; padding: 12px 14px; background: #2d1e18; border: 1px solid #3d2e26; color: var(--cream); font-family: 'Inter', sans-serif; font-size: 14px; border-radius: 2px; outline: none; }
+    .scan-alt input:focus { border-color: var(--caramel); }
+    .scan-alt button { padding: 12px 20px; background: var(--caramel); color: var(--espresso); border: none; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+
+    /* Client card */
+    #client-card { display: none; margin: 20px; background: var(--cream); color: var(--espresso); padding: 24px; border-radius: 2px; }
+    .client-name { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; margin-bottom: 4px; }
+    .client-visits { font-size: 13px; color: var(--text-soft); margin-bottom: 20px; }
+    .discount-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--espresso); color: var(--caramel); padding: 10px 16px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 24px; }
+    .discount-badge::before { content: '✓'; }
+
+    /* Transactions */
+    .tx-section { margin-bottom: 20px; }
+    .tx-label { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 10px; }
+    .tx-list { display: flex; flex-direction: column; gap: 8px; }
+    .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--fog); cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s; border-radius: 2px; }
+    .tx-item.selected { border-color: var(--caramel); }
+    .tx-products { font-size: 13px; font-weight: 500; }
+    .tx-meta { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+    .tx-amount { font-size: 15px; font-weight: 600; color: var(--espresso); }
+    .tx-none { font-size: 13px; color: var(--text-soft); font-style: italic; padding: 10px 0; }
+
+    /* Validate button */
+    .btn-validate { width: 100%; padding: 18px; background: var(--green); color: white; border: none; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: opacity 0.2s; }
+    .btn-validate:hover { opacity: 0.9; }
+    .btn-validate:disabled { background: var(--latte); color: var(--text-soft); cursor: not-allowed; }
+    .btn-cancel { width: 100%; margin-top: 10px; padding: 12px; background: transparent; color: var(--text-soft); border: 1px solid #3d2e26; font-family: 'Inter', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 14px 28px; font-size: 13px; font-weight: 500; border-radius: 2px; display: none; z-index: 999; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <span class="topbar-logo">Soul — Caisse</span>
+    <div class="topbar-links">
+      <a href="/admin">Admin</a>
+      <a href="/caisse/logout">Déconnexion</a>
+    </div>
+  </div>
+
+  <!-- Scanner QR -->
+  <div class="scanner-section">
+    <p class="section-title">Scanner la carte client</p>
+    <div id="reader"></div>
+    <div class="scan-alt">
+      <input type="text" id="manual-input" placeholder="Ou saisir le code manuellement…">
+      <button onclick="manualScan()">OK</button>
+    </div>
+  </div>
+
+  <!-- Profil client -->
+  <div id="client-card">
+    <p class="client-name" id="client-name">—</p>
+    <p class="client-visits" id="client-visits">—</p>
+    <div class="discount-badge">−10% à appliquer en caisse</div>
+
+    <div class="tx-section">
+      <p class="tx-label">Transaction SumUp la plus proche</p>
+      <div class="tx-list" id="tx-list">
+        <p class="tx-none">Chargement…</p>
+      </div>
+    </div>
+
+    <button class="btn-validate" id="btn-validate" onclick="validateVisit()">
+      ✓ Valider la visite
+    </button>
+    <button class="btn-cancel" onclick="resetScanner()">Annuler — nouveau scan</button>
+  </div>
+
+  <div id="toast">Visite enregistrée ✓</div>
+
+  <script>
+    let currentClient = null;
+    let selectedTx = null;
+    let scanTime = null;
+    let scanner = null;
+
+    // Init scanner
+    function initScanner() {
+      scanner = new Html5Qrcode("reader");
+      scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        onScanSuccess,
+        () => {}
+      ).catch(() => {
+        document.getElementById('reader').innerHTML = '<p style="color:var(--latte);font-size:12px;padding:20px;text-align:center">Caméra non disponible — utilisez la saisie manuelle.</p>';
+      });
+    }
+
+    function onScanSuccess(decodedText) {
+      // Extraire le QR code de l'URL encodée
+      let qrCode = decodedText;
+      const match = decodedText.match(/\/api\/client\/([a-f0-9-]{36})/);
+      if (match) qrCode = match[1];
+      lookupClient(qrCode);
+    }
+
+    function manualScan() {
+      const val = document.getElementById('manual-input').value.trim();
+      if (!val) return;
+      let qrCode = val;
+      const match = val.match(/\/api\/client\/([a-f0-9-]{36})/);
+      if (match) qrCode = match[1];
+      lookupClient(qrCode);
+    }
+
+    async function lookupClient(qrCode) {
+      scanTime = new Date().toISOString();
+      try {
+        const res = await fetch(`/caisse/scan/${qrCode}`);
+        const data = await res.json();
+        if (!res.ok) { alert(data.error || 'Carte non reconnue.'); return; }
+
+        currentClient = data.client;
+        selectedTx = null;
+
+        document.getElementById('client-name').textContent = `${data.client.first_name} ${data.client.last_name}`;
+        const visits = data.client.visit_count;
+        document.getElementById('client-visits').textContent = visits === 0
+          ? 'Première visite aujourd\'hui'
+          : `${visits} visite${visits > 1 ? 's' : ''} — dernière le ${formatDate(data.client.last_visit)}`;
+
+        renderTransactions(data.recentTransactions, data.scanTime);
+
+        if (scanner) {
+          scanner.stop().catch(() => {});
+        }
+        document.getElementById('client-card').style.display = 'block';
+        document.getElementById('client-card').scrollIntoView({ behavior: 'smooth' });
+      } catch (e) {
+        alert('Erreur de connexion.');
+      }
+    }
+
+    function renderTransactions(txList, scanTimeStr) {
+      const container = document.getElementById('tx-list');
+      if (!txList || txList.length === 0) {
+        container.innerHTML = '<p class="tx-none">Aucune transaction SumUp récente trouvée.</p>';
+        return;
+      }
+
+      const scanDt = new Date(scanTimeStr);
+
+      // Trier par proximité temporelle au scan
+      const sorted = txList.slice().sort((a, b) => {
+        const dA = Math.abs(new Date(a.timestamp) - scanDt);
+        const dB = Math.abs(new Date(b.timestamp) - scanDt);
+        return dA - dB;
+      });
+
+      container.innerHTML = '';
+      sorted.forEach((tx, i) => {
+        const dt = new Date(tx.timestamp || tx.created_at);
+        const diffSec = Math.round(Math.abs(dt - scanDt) / 1000);
+        const diffStr = diffSec < 60 ? `${diffSec}s après scan` : `${Math.round(diffSec/60)}min après scan`;
+
+        const el = document.createElement('div');
+        el.className = 'tx-item' + (i === 0 ? ' selected' : '');
+        el.innerHTML = `
+          <div>
+            <div class="tx-products">${tx.product_summary || tx.description || 'Transaction'}</div>
+            <div class="tx-meta">${formatTime(dt)} · ${diffStr}</div>
+          </div>
+          <div class="tx-amount">${tx.amount}€</div>
+        `;
+        el.onclick = () => {
+          document.querySelectorAll('.tx-item').forEach(e => e.classList.remove('selected'));
+          el.classList.add('selected');
+          selectedTx = tx;
+        };
+        if (i === 0) selectedTx = tx;
+        container.appendChild(el);
+      });
+    }
+
+    async function validateVisit() {
+      if (!currentClient) return;
+      const btn = document.getElementById('btn-validate');
+      btn.disabled = true;
+      btn.textContent = 'Enregistrement…';
+
+      try {
+        const body = {
+          client_id: currentClient.id,
+          sumup_transaction_id: selectedTx?.id || null,
+          sumup_amount: selectedTx?.amount || null,
+          sumup_products: selectedTx?.product_summary || selectedTx?.description || null
+        };
+        const res = await fetch('/caisse/valider', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        if (res.ok) {
+          showToast('Visite enregistrée ✓');
+          setTimeout(resetScanner, 1800);
+        }
+      } catch (e) {
+        alert('Erreur lors de la validation.');
+        btn.disabled = false;
+        btn.textContent = '✓ Valider la visite';
+      }
+    }
+
+    function resetScanner() {
+      currentClient = null;
+      selectedTx = null;
+      document.getElementById('client-card').style.display = 'none';
+      document.getElementById('manual-input').value = '';
+      document.getElementById('btn-validate').disabled = false;
+      document.getElementById('btn-validate').textContent = '✓ Valider la visite';
+      initScanner();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+    }
+
+    function formatTime(dt) {
+      return dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Auto-scan depuis URL ?scan=xxx (redirect depuis QR code)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('scan')) {
+      lookupClient(params.get('scan'));
+    }
+
+    initScanner();
+  </script>
+</body>
+</html>

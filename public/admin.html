@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOUL — Admin Fidélité</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --cream: #F7F3EE; --espresso: #1C1410; --caramel: #C8894A; --latte: #D9BFA0; --fog: #EDE8E2; --text-soft: #6B5D52; }
+    body { background: var(--cream); color: var(--espresso); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--latte); background: var(--espresso); color: var(--cream); }
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--latte); }
+    .topbar-links a { font-size: 11px; color: var(--latte); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; margin-left: 20px; }
+
+    .main { padding: 32px 24px; max-width: 900px; margin: 0 auto; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: var(--espresso); color: var(--cream); padding: 24px 20px; }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--caramel); line-height: 1; }
+    .stat-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--latte); margin-top: 6px; }
+
+    /* Section */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-title { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caramel); }
+
+    /* Table */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 10px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-soft); padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--latte); }
+    td { padding: 14px 12px; font-size: 13px; border-bottom: 1px solid var(--fog); vertical-align: top; }
+    tr:hover td { background: var(--fog); }
+    .client-full { font-weight: 500; }
+    .client-meta { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+    .badge-visits { display: inline-block; background: var(--espresso); color: var(--caramel); font-size: 11px; font-weight: 600; padding: 3px 8px; }
+    .btn-detail { font-size: 11px; color: var(--caramel); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+    .btn-deactivate { font-size: 11px; color: #c00; background: none; border: none; cursor: pointer; padding: 0; margin-left: 12px; }
+
+    /* Modal historique */
+    #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    #modal.open { display: flex; }
+    .modal-box { background: var(--cream); max-width: 560px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 28px; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; margin-bottom: 4px; }
+    .modal-sub { font-size: 12px; color: var(--text-soft); margin-bottom: 24px; }
+    .visit-item { padding: 14px 0; border-bottom: 1px solid var(--fog); }
+    .visit-date { font-size: 12px; font-weight: 500; letter-spacing: 0.05em; }
+    .visit-products { font-size: 13px; color: var(--espresso); margin-top: 3px; }
+    .visit-amount { font-size: 12px; color: var(--caramel); font-weight: 600; margin-top: 2px; }
+    .modal-close { margin-top: 20px; padding: 12px 24px; background: var(--espresso); color: var(--cream); border: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
+    .no-visits { font-size: 13px; color: var(--text-soft); font-style: italic; }
+
+    .loading { text-align: center; padding: 40px; color: var(--text-soft); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">Soul — Admin Fidélité</span>
+  <div>
+    <a href="/caisse">Caisse</a>
+    <a href="/caisse/logout">Déconnexion</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Stats -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="s-clients">—</div><div class="stat-label">Membres actifs</div></div>
+    <div class="stat-card"><div class="stat-value" id="s-visits">—</div><div class="stat-label">Visites totales</div></div>
+    <div class="stat-card"><div class="stat-value">−10%</div><div class="stat-label">Remise appliquée</div></div>
+  </div>
+
+  <!-- Clients -->
+  <div class="section-header">
+    <p class="section-title">Membres</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Visites</th>
+          <th>Dernière visite</th>
+          <th>Dépensé</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="clients-body">
+        <tr><td colspan="5" class="loading">Chargement…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal historique -->
+<div id="modal">
+  <div class="modal-box">
+    <p class="modal-title" id="modal-name">—</p>
+    <p class="modal-sub" id="modal-sub">Historique des visites</p>
+    <div id="modal-visits"></div>
+    <button class="modal-close" onclick="closeModal()">Fermer</button>
+  </div>
+</div>
+
+<script>
+  async function loadStats() {
+    const res = await fetch('/admin/stats');
+    const d = await res.json();
+    document.getElementById('s-clients').textContent = d.total_clients;
+    document.getElementById('s-visits').textContent = d.total_visits;
+  }
+
+  async function loadClients() {
+    const res = await fetch('/admin/clients');
+    const clients = await res.json();
+    const tbody = document.getElementById('clients-body');
+
+    if (!clients.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-soft);font-size:13px;font-style:italic;padding:20px 12px">Aucun membre inscrit.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = clients.map(c => `
+      <tr>
+        <td>
+          <div class="client-full">${c.first_name} ${c.last_name}</div>
+          <div class="client-meta">${c.email || ''} ${c.phone ? '· ' + c.phone : ''}</div>
+        </td>
+        <td><span class="badge-visits">${c.visit_count}</span></td>
+        <td style="font-size:12px;color:var(--text-soft)">${c.last_visit ? formatDate(c.last_visit) : '—'}</td>
+        <td style="font-size:13px;font-weight:500">${c.total_spent ? parseFloat(c.total_spent).toFixed(2) + ' €' : '—'}</td>
+        <td>
+          <button class="btn-detail" onclick="openModal('${c.id}', '${c.first_name} ${c.last_name}', ${c.visit_count})">Historique</button>
+          <button class="btn-deactivate" onclick="deactivate('${c.id}')">Supprimer</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  async function openModal(clientId, name, visits) {
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-sub').textContent = `${visits} visite${visits > 1 ? 's' : ''}`;
+    document.getElementById('modal-visits').innerHTML = '<p style="font-size:13px;color:var(--text-soft)">Chargement…</p>';
+    document.getElementById('modal').classList.add('open');
+
+    const res = await fetch(`/admin/clients/${clientId}/visites`);
+    const visits_data = await res.json();
+    const container = document.getElementById('modal-visits');
+
+    if (!visits_data.length) {
+      container.innerHTML = '<p class="no-visits">Aucune visite enregistrée.</p>';
+      return;
+    }
+
+    container.innerHTML = visits_data.map(v => `
+      <div class="visit-item">
+        <div class="visit-date">${formatDateFull(v.visited_at)}</div>
+        <div class="visit-products">${v.sumup_products || 'Commande non détaillée'}</div>
+        ${v.sumup_amount ? `<div class="visit-amount">${parseFloat(v.sumup_amount).toFixed(2)} €</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  async function deactivate(id) {
+    if (!confirm('Supprimer ce membre ? Cette action est irréversible.')) return;
+    await fetch(`/admin/clients/${id}/desactiver`, { method: 'POST' });
+    loadClients();
+    loadStats();
+  }
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function formatDateFull(iso) {
+    return new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  loadStats();
+  loadClients();
+</script>
+</body>
+</html>
