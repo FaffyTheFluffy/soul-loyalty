@@ -3,35 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOUL — Accès Caisse</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>SŌUL — Accès Caisse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --cream: #F7F3EE; --espresso: #1C1410; --caramel: #C8894A; --latte: #D9BFA0; --text-soft: #6B5D52; }
-    body { background: var(--espresso); color: var(--cream); font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-    .card { max-width: 340px; width: 100%; text-align: center; }
-    .logo { font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--latte); }
-    .divider { width: 32px; height: 1px; background: var(--caramel); margin: 16px auto; }
-    h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 4px; }
-    .sub { font-size: 12px; color: var(--latte); margin-bottom: 40px; }
-    input[type="password"] { width: 100%; padding: 14px 0; border: none; border-bottom: 1px solid #3d2e26; background: transparent; color: var(--cream); font-family: 'Inter', sans-serif; font-size: 16px; text-align: center; letter-spacing: 0.15em; outline: none; transition: border-color 0.2s; }
-    input[type="password"]:focus { border-bottom-color: var(--caramel); }
-    input::placeholder { color: #3d2e26; letter-spacing: 0.05em; font-size: 13px; }
-    .btn { margin-top: 32px; width: 100%; padding: 16px; background: var(--caramel); color: var(--espresso); border: none; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
-    .error { color: #ff8a80; font-size: 12px; margin-top: 16px; }
+    :root { --yellow: #F2EA3C; --black: #0A0A0A; --white: #FFFFFF; --light: #F5F5F5; --text-muted: #888; --border: #E0E0E0; }
+    body { background: var(--white); color: var(--black); font-family: 'Montserrat', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .header { background: var(--white); padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .header-logo { height: 36px; width: auto; display: block; }
+    .header-label { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); }
+
+    .hero-band { background: var(--yellow); padding: 18px 28px; }
+    .hero-text { font-size: clamp(16px, 4.5vw, 22px); font-weight: 900; font-style: italic; color: var(--white); line-height: 1.2; text-transform: uppercase; letter-spacing: -0.01em; }
+
+    .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 28px; }
+    .login-box { width: 100%; max-width: 360px; }
+
+    .login-title { font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .login-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    input[type="password"] {
+      width: 100%; padding: 16px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.3em; text-align: center; outline: none; border-radius: 0; -webkit-appearance: none; appearance: none; transition: border-color 0.15s; margin-bottom: 16px;
+    }
+    input[type="password"]:focus { border-color: var(--black); }
+    input::placeholder { color: #ccc; letter-spacing: 0.1em; font-size: 13px; font-weight: 400; }
+
+    .btn-login { width: 100%; padding: 18px; background: var(--yellow); color: var(--white); border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
+    .btn-login:hover { opacity: 0.9; }
+
+    .error { font-size: 11px; font-weight: 600; color: #cc0000; text-align: center; margin-top: 14px; display: none; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <p class="logo">Soul Coffee</p>
-    <div class="divider"></div>
-    <h1>Accès caisse</h1>
-    <p class="sub">Réservé au personnel</p>
-    <form method="POST" action="/caisse/login">
-      <input type="password" name="password" placeholder="Mot de passe" autofocus>
-      <button type="submit" class="btn">Entrer</button>
-      <p class="error" id="err" style="display:none">Mot de passe incorrect.</p>
-    </form>
+  <div class="header">
+    <img src="/SOUL_LOGO_noir.png" alt="SŌUL" class="header-logo">
+    <span class="header-label">Accès caisse</span>
+  </div>
+  <div class="hero-band">
+    <p class="hero-text">Réservé au personnel.</p>
+  </div>
+  <div class="login-wrap">
+    <div class="login-box">
+      <p class="login-title">Mot de passe</p>
+      <form method="POST" action="/caisse/login">
+        <input type="password" name="password" placeholder="••••••••" autofocus>
+        <button type="submit" class="btn-login">Accéder à la caisse →</button>
+        <p class="error" id="err">Mot de passe incorrect.</p>
+      </form>
+    </div>
   </div>
   <script>
     if (window.location.search.includes('error')) document.getElementById('err').style.display = 'block';
