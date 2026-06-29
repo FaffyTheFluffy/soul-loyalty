@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SŌUL — Carte Privilège</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #F2EA3C;
+      --black: #0A0A0A;
+      --white: #FFFFFF;
+      --light: #F5F5F5;
+      --text-muted: #888888;
+      --border: #E0E0E0;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .header {
+      background: var(--white);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-logo {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    .header-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* HERO BAND */
+    .hero-band {
+      background: var(--yellow);
+      padding: 18px 28px;
+    }
+
+    .hero-text {
+      font-size: clamp(16px, 4.5vw, 22px);
+      font-weight: 900;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      
+    }
+
+    /* FORM */
+    .form-wrap {
+      flex: 1;
+      padding: 36px 28px 60px;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .form-section {
+      margin-bottom: 36px;
+    }
+
+    .section-label {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .field label .req { color: var(--black); }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      color: var(--black);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="date"]:focus,
+    select:focus {
+      border-color: var(--black);
+    }
+
+    input::placeholder { color: #ccc; font-weight: 400; }
+    select { cursor: pointer; }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* RGPD */
+    .rgpd-box {
+      background: var(--light);
+      border-left: 3px solid var(--yellow);
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+
+    .rgpd-text {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .rgpd-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .rgpd-check input[type="checkbox"] {
+      -webkit-appearance: checkbox !important;
+      appearance: checkbox !important;
+      width: 20px !important;
+      height: 20px !important;
+      min-width: 20px !important;
+      padding: 0 !important;
+      border: 2px solid var(--black) !important;
+      border-bottom: 2px solid var(--black) !important;
+      background: var(--white) !important;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--black);
+    }
+
+    .rgpd-check span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: var(--yellow);
+      color: var(--white);
+      border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      
+    }
+
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* SUCCESS */
+    #success-screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      background: var(--white);
+    }
+
+    .success-header {
+      background: var(--yellow);
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .success-header-logo {
+      height: 36px;
+      width: auto;
+    }
+
+    .success-badge {
+      font-size: 10px;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--white);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      
+    }
+
+    .success-body {
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .success-name {
+      font-size: clamp(30px, 9vw, 44px);
+      font-weight: 900;
+      font-style: italic;
+      color: var(--black);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .success-msg {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .success-msg strong {
+      color: var(--black);
+      font-weight: 800;
+    }
+
+    .qr-wrap {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      padding: 16px;
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+
+    #qr-image {
+      width: 200px;
+      height: 200px;
+      display: block;
+    }
+
+    .save-hint {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .save-sub {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .btn-save {
+      padding: 15px 32px;
+      background: var(--yellow);
+      border: none;
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      
+    }
+
+    .btn-save:hover { opacity: 0.85; }
+
+    .error-msg {
+      background: #fff0f0;
+      border-left: 3px solid #ff4444;
+      color: #cc0000;
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FORMULAIRE -->
+  <div id="form-screen">
+    <div class="header">
+      <img src="/SOUL_LOGO_noir.png" alt="SŌUL" class="header-logo">
+      <span class="header-label">Carte privilège</span>
+    </div>
+
+    <div class="hero-band">
+      <p class="hero-text">−10% à chaque visite.<br>Friends, family & partenaires.</p>
+    </div>
+
+    <div class="form-wrap">
+      <div class="error-msg" id="error-msg"></div>
+
+      <form id="register-form">
+        <div class="form-section">
+          <p class="section-label">Identité</p>
+          <div class="field-row">
+            <div class="field">
+              <label>Prénom <span class="req">*</span></label>
+              <input type="text" name="first_name" placeholder="Fabien" required>
+            </div>
+            <div class="field">
+              <label>Nom <span class="req">*</span></label>
+              <input type="text" name="last_name" placeholder="Antoine" required>
+            </div>
+          </div>
+          <div class="field">
+            <label>Genre</label>
+            <select name="gender">
+              <option value="">Non précisé</option>
+              <option value="F">Femme</option>
+              <option value="M">Homme</option>
+              <option value="NB">Non-binaire</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date de naissance</label>
+            <input type="date" name="birth_date">
+          </div>
+        </div>
+
+        <div class="form-section">
+          <p class="section-label">Contact</p>
+          <div class="field">
+            <label>Téléphone</label>
+            <input type="tel" name="phone" placeholder="06 00 00 00 00">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="fabien@exemple.fr">
+          </div>
+        </div>
+
+        <div class="rgpd-box">
+          <p class="rgpd-text">
+            Vos données personnelles sont collectées par SŌUL dans le cadre de notre programme de fidélité. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données en nous contactant. Vos données ne seront jamais cédées à des tiers.
+          </p>
+          <label class="rgpd-check">
+            <input type="checkbox" name="rgpd" id="rgpd" required>
+            <span>J'accepte que SŌUL conserve mes données personnelles à des fins de fidélisation. <span class="req">*</span></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          Créer ma carte privilège →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="success-screen">
+    <div class="success-header">
+      <img src="/SOUL_LOGO_noir.png" alt="SŌUL" class="success-header-logo">
+      <span class="success-badge">Carte activée ✓</span>
+    </div>
+    <div class="success-body">
+      <p class="success-name" id="success-name">Bienvenue !</p>
+      <p class="success-msg">
+        Votre carte est prête.<br>
+        Présentez-la à chaque visite<br>
+        pour bénéficier de <strong>−10%</strong> sur votre commande.
+      </p>
+      <div class="qr-wrap">
+        <img id="qr-image" src="" alt="Votre QR code SŌUL">
+      </div>
+      <p class="save-hint">↓ Enregistrez ce QR code</p>
+      <p class="save-sub">Appuyez longuement sur l'image<br>et ajoutez-la à vos photos.</p>
+      <button class="btn-save" onclick="downloadQR()">Télécharger le QR code</button>
+    </div>
+  </div>
+
+  <script>
+    let qrDataUrl = '';
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const errEl = document.getElementById('error-msg');
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Création en cours…';
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch('/inscription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+          errEl.textContent = json.error || 'Une erreur est survenue.';
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Créer ma carte privilège →';
+          return;
+        }
+
+        qrDataUrl = json.qrImageUrl;
+        document.getElementById('qr-image').src = qrDataUrl;
+        document.getElementById('success-name').textContent = json.firstName + ' !';
+        document.getElementById('form-screen').style.display = 'none';
+        const ss = document.getElementById('success-screen');
+        ss.style.display = 'flex';
+      } catch (err) {
+        errEl.textContent = 'Erreur de connexion. Réessayez.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Créer ma carte privilège →';
+      }
+    });
+
+    function downloadQR() {
+      const a = document.createElement('a');
+      a.href = qrDataUrl;
+      a.download = 'soul-carte-privilege.png';
+      a.click();
+    }
+  </script>
+</body>
+</html>
