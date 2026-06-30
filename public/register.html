@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>SŌUL — Carte Privilège</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -52,15 +52,42 @@
     #success-screen { display: none; flex-direction: column; align-items: center; min-height: 100vh; background: var(--white); padding-bottom: 60px; }
     .success-top-band { width: 100%; background: var(--yellow); padding: 14px 28px; }
     .success-top-text { font-size: 13px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
-    .success-body { padding: 32px 20px 0; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 400px; }
-    .success-msg { font-size: 13px; font-weight: 500; color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+    .success-body { padding: 28px 16px 0; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; }
+    .success-msg { font-size: 13px; font-weight: 500; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; max-width: 340px; }
     .success-msg strong { color: var(--black); font-weight: 800; }
 
-    /* Canvas 9:16 */
-    #card-canvas { display: block; width: 100%; max-width: 360px; height: auto; }
-    .canvas-wrap { margin-bottom: 20px; width: 100%; display: flex; justify-content: center; }
+    /* Canvas responsive 9:16 */
+    .canvas-wrap {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .canvas-wrap::before {
+      content: '';
+      display: block;
+      padding-top: 177.78%; /* 16/9 ratio */
+    }
+    #card-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
 
-    .save-instruction { background: var(--yellow); color: var(--white); font-size: 12px; font-weight: 700; font-style: italic; padding: 14px 20px; text-align: center; line-height: 1.6; width: 100%; max-width: 360px; margin-top: 4px; }
+    .save-instruction {
+      background: var(--light);
+      border-left: 3px solid var(--yellow);
+      color: var(--black);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 16px 20px;
+      text-align: left;
+      line-height: 1.6;
+      width: 100%;
+      max-width: 400px;
+    }
+    .save-instruction span { color: var(--text-muted); font-weight: 400; font-size: 12px; display: block; margin-top: 4px; }
   </style>
 </head>
 <body>
@@ -116,23 +143,13 @@
         <canvas id="card-canvas" width="900" height="1600"></canvas>
       </div>
       <div class="save-instruction">
-        Appuyez longuement sur la carte<br>→ "Enregistrer l'image" pour l'ajouter à vos photos
+        📸 Faites une capture d'écran pour enregistrer votre carte
+        <span>iPhone : bouton latéral + volume haut simultanément</span>
       </div>
     </div>
   </div>
 
   <script>
-    let qrDataUrl = '';
-    let shortCode = '';
-
-    // Génère un code court 4 caractères alphanumérique
-    function generateShortCode() {
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let code = '';
-      for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
-      return code;
-    }
-
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
@@ -151,12 +168,11 @@
           btn.textContent = 'Créer ma carte privilège →';
           return;
         }
-        qrDataUrl = json.qrImageUrl;
-        shortCode = json.qrCode.slice(0, 4).toUpperCase();
-        const firstName = (data.first_name + ' ' + data.last_name).toUpperCase();
+        const fullName = (data.first_name + ' ' + data.last_name).toUpperCase();
+        const shortCode = json.qrCode.slice(0, 4).toUpperCase();
         document.getElementById('form-screen').style.display = 'none';
         document.getElementById('success-screen').style.display = 'flex';
-        drawCard(qrDataUrl, firstName, shortCode);
+        drawCard(json.qrImageUrl, fullName, shortCode);
       } catch (err) {
         errEl.textContent = 'Erreur de connexion. Réessayez.';
         errEl.style.display = 'block';
@@ -170,87 +186,131 @@
       const ctx = canvas.getContext('2d');
       const W = 900, H = 1600;
 
-      // Fond jaune plein
+      // Fond jaune
       ctx.fillStyle = '#F2EA3C';
       ctx.fillRect(0, 0, W, H);
 
-      // Cercle déco haut droite
+      // Cercles décoratifs
       ctx.beginPath();
-      ctx.arc(W + 80, -80, 420, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-      ctx.lineWidth = 80;
+      ctx.arc(W + 100, -100, 460, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 90;
       ctx.stroke();
 
-      // Cercle déco bas gauche
       ctx.beginPath();
-      ctx.arc(-80, H + 80, 380, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-      ctx.lineWidth = 60;
+      ctx.arc(-100, H + 100, 400, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+      ctx.lineWidth = 70;
       ctx.stroke();
 
-      // LOGO SŌUL (texte)
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '900 italic 130px Montserrat, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('SŌUL', 70, 170);
+      // Charger le logo blanc
+      const logo = new Image();
+      logo.onload = function() {
+        // Logo PNG blanc en haut à gauche
+        const logoH = 90;
+        const logoW = (logo.width / logo.height) * logoH;
+        ctx.drawImage(logo, 70, 80, logoW, logoH);
 
-      // Label "CARTE PRIVILÈGE"
-      ctx.fillStyle = 'rgba(255,255,255,0.75)';
-      ctx.font = '700 22px Montserrat, sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText('CARTE PRIVILÈGE', W - 70, 100);
+        // Label CARTE PRIVILÈGE
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = '700 22px Montserrat, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('CARTE PRIVILÈGE', W - 70, 130);
 
-      // Ligne séparatrice
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.fillRect(70, 200, W - 140, 2);
+        // Ligne séparatrice
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(70, 210, W - 140, 2);
 
-      // Prénom + Nom
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '900 italic 80px Montserrat, sans-serif';
-      ctx.textAlign = 'left';
-      // Adapter la taille si le nom est long
-      const nameWidth = ctx.measureText(fullName).width;
-      if (nameWidth > W - 140) {
-        ctx.font = '900 italic 56px Montserrat, sans-serif';
-      }
-      ctx.fillText(fullName, 70, 310);
-
-      // QR CODE — centré, grand
-      const qrImg = new Image();
-      qrImg.onload = function() {
-        const qrSize = 580;
-        const qrX = (W - qrSize) / 2;
-        const qrY = 380;
-
-        // Fond blanc arrondi pour QR
+        // Prénom + Nom
         ctx.fillStyle = '#FFFFFF';
-        roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 16);
-        ctx.fill();
+        ctx.textAlign = 'left';
+        let fontSize = 82;
+        ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
+        while (ctx.measureText(fullName).width > W - 140 && fontSize > 44) {
+          fontSize -= 4;
+          ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
+        }
+        ctx.fillText(fullName, 70, 330);
 
-        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+        // QR CODE
+        const qrImg = new Image();
+        qrImg.onload = function() {
+          const qrSize = 580;
+          const qrX = (W - qrSize) / 2;
+          const qrY = 400;
 
-        // Code de secours
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.font = '800 28px Montserrat, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + 80);
+          // Fond blanc arrondi
+          ctx.fillStyle = '#FFFFFF';
+          roundRect(ctx, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 20);
+          ctx.fill();
 
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = '900 italic 100px Montserrat, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText(code, W / 2, qrY + qrSize + 190);
+          ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-        // Ligne bas
-        ctx.fillStyle = 'rgba(255,255,255,0.25)';
-        ctx.fillRect(70, H - 120, W - 140, 2);
+          // Séparateur
+          ctx.fillStyle = 'rgba(255,255,255,0.2)';
+          ctx.fillRect(70, qrY + qrSize + 60, W - 140, 2);
 
-        // Soul en bas
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.font = '700 24px Montserrat, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('soul-loyalty-production.up.railway.app', W / 2, H - 70);
+          // CODE DE SECOURS label
+          ctx.fillStyle = 'rgba(255,255,255,0.75)';
+          ctx.font = '700 26px Montserrat, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + 110);
+
+          // Code 4 caractères
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '900 italic 110px Montserrat, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(code, W / 2, qrY + qrSize + 240);
+        };
+        qrImg.src = qrSrc;
       };
-      qrImg.src = qrSrc;
+
+      logo.onerror = function() {
+        // Fallback texte si logo ne charge pas
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 italic 130px Montserrat, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('SŌUL', 70, 170);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = '700 22px Montserrat, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('CARTE PRIVILÈGE', W - 70, 130);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.fillRect(70, 210, W - 140, 2);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.textAlign = 'left';
+        let fontSize = 82;
+        ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
+        while (ctx.measureText(fullName).width > W - 140 && fontSize > 44) {
+          fontSize -= 4;
+          ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
+        }
+        ctx.fillText(fullName, 70, 330);
+
+        const qrImg = new Image();
+        qrImg.onload = function() {
+          const qrSize = 580, qrX = (W - qrSize) / 2, qrY = 400;
+          ctx.fillStyle = '#FFFFFF';
+          roundRect(ctx, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 20);
+          ctx.fill();
+          ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+          ctx.fillStyle = 'rgba(255,255,255,0.2)';
+          ctx.fillRect(70, qrY + qrSize + 60, W - 140, 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.75)';
+          ctx.font = '700 26px Montserrat, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + 110);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '900 italic 110px Montserrat, sans-serif';
+          ctx.fillText(code, W / 2, qrY + qrSize + 240);
+        };
+        qrImg.src = qrSrc;
+      };
+
+      logo.src = '/SOUL_LOGO_white.png';
     }
 
     function roundRect(ctx, x, y, w, h, r) {
