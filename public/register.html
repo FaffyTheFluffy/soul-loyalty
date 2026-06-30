@@ -117,7 +117,7 @@
         <div class="form-section">
           <p class="section-label">Contact</p>
           <div class="field"><label>Téléphone</label><input type="tel" name="phone" placeholder="06 00 00 00 00"></div>
-          <div class="field"><label>Email</label><input type="email" name="email" placeholder="fabien@exemple.fr"></div>
+          <div class="field"><label>Email</label><input type="email" name="email" placeholder="fabien@exemple.fr" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Veuillez entrer une adresse email valide"></div>
         </div>
         <div class="rgpd-box">
           <p class="rgpd-text">Vos données personnelles sont collectées par SŌUL dans le cadre de notre programme de fidélité. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données en nous contactant. Vos données ne seront jamais cédées à des tiers.</p>
@@ -212,15 +212,27 @@
           fontSize -= 4;
           ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
         }
-        ctx.fillText(fullName, W / 2, 330);
-        window.__nameFontSize = fontSize;
+        // Bloc nom+QR+code centré verticalement dans l'espace sous le logo
+        const blockTop = 280;   // début de l'espace dispo (sous logo)
+        const blockBottom = H - 60;
+        const blockHeight = blockBottom - blockTop;
+
+        const qrSize = 580;
+        const nameHeight = 70;
+        const gapNameQr = 50;
+        const gapQrCode = 110;
+        const codeHeight = 130;
+        const totalContentHeight = nameHeight + gapNameQr + qrSize + gapQrCode + codeHeight;
+        const startY = blockTop + (blockHeight - totalContentHeight) / 2;
+
+        const nameY = startY + nameHeight;
+        ctx.fillText(fullName, W / 2, nameY);
 
         // QR CODE
         const qrImg = new Image();
         qrImg.onload = function() {
-          const qrSize = 580;
           const qrX = (W - qrSize) / 2;
-          const qrY = 400;
+          const qrY = nameY + gapNameQr;
 
           ctx.fillStyle = '#FFFFFF';
           roundRect(ctx, qrX - 24, qrY - 24, qrSize + 48, qrSize + 48, 20);
@@ -231,22 +243,22 @@
           ctx.fillStyle = 'rgba(10,10,10,0.65)';
           ctx.font = '700 26px Montserrat, sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + 110);
+          ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + gapQrCode);
 
           ctx.fillStyle = '#0A0A0A';
           ctx.font = '900 italic 110px Montserrat, sans-serif';
-          ctx.fillText(code, W / 2, qrY + qrSize + 240);
+          ctx.fillText(code, W / 2, qrY + qrSize + gapQrCode + 110);
         };
         qrImg.src = qrSrc;
       }
 
-      // Charger le logo NOIR, centré, environ moitié de la hauteur du nom
+      // Charger le logo NOIR, centré
       const logo = new Image();
       logo.onload = function() {
-        const logoH = 38; // environ la moitié de la taille du texte du nom (~76px)
+        const logoH = 144;
         const logoW = (logo.width / logo.height) * logoH;
         const logoX = (W - logoW) / 2;
-        ctx.drawImage(logo, logoX, 90, logoW, logoH);
+        ctx.drawImage(logo, logoX, 80, logoW, logoH);
 
         drawRest();
       };
@@ -254,9 +266,9 @@
       logo.onerror = function() {
         // Fallback texte noir centré si logo ne charge pas
         ctx.fillStyle = '#0A0A0A';
-        ctx.font = '900 italic 38px Montserrat, sans-serif';
+        ctx.font = '900 italic 104px Montserrat, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('SŌUL', W / 2, 120);
+        ctx.fillText('SŌUL', W / 2, 190);
 
         drawRest();
       };
