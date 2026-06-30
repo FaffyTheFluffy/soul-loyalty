@@ -31,22 +31,28 @@ router.get('/', requireCashier, (req, res) => {
   res.sendFile(require('path').join(__dirname, '../public/cashier.html'));
 });
 
-// Scan QR → profil client
-router.get('/scan/:qrCode', requireCashier, async (req, res) => {
+// Scan QR ou code court → profil client
+router.get('/scan/:code', requireCashier, async (req, res) => {
   const pool = req.app.locals.pool;
-  const { qrCode } = req.params;
+  const { code } = req.params;
 
   try {
-    const clientRes = await pool.query(
-      `SELECT c.*, 
-        COUNT(v.id) as visit_count,
-        MAX(v.visited_at) as last_visit
-       FROM loyalty_clients c
-       LEFT JOIN visits v ON v.client_id = c.id
-       WHERE c.qr_code = $1 AND c.active = true
-       GROUP BY c.id`,
-      [qrCode]
-    );
+    // Si le code fait 36 caractères (UUID complet) -> recherche par qr_code
+    // Sinon -> recherche par short_code (4 caractères)
+    const isFullUuid = code.length === 36;
+    const query = isFullUuid
+      ? `SELECT c.*, COUNT(v.id) as visit_count, MAX(v.visited_at) as last_visit
+         FROM loyalty_clients c
+         LEFT JOIN visits v ON v.client_id = c.id
+         WHERE c.qr_code = $1 AND c.active = true
+         GROUP BY c.id`
+      : `SELECT c.*, COUNT(v.id) as visit_count, MAX(v.visited_at) as last_visit
+         FROM loyalty_clients c
+         LEFT JOIN visits v ON v.client_id = c.id
+         WHERE UPPER(c.short_code) = UPPER($1) AND c.active = true
+         GROUP BY c.id`;
+
+    const clientRes = await pool.query(query, [code]);
 
     if (clientRes.rows.length === 0) {
       return res.status(404).json({ error: 'Carte non reconnue.' });
@@ -54,7 +60,6 @@ router.get('/scan/:qrCode', requireCashier, async (req, res) => {
 
     const client = clientRes.rows[0];
 
-    // Récupérer les dernières transactions SumUp proches du scan
     let recentTransactions = [];
     try {
       const now = new Date();
@@ -89,7 +94,6 @@ router.get('/scan/:qrCode', requireCashier, async (req, res) => {
   }
 });
 
-// Valider une visite + attacher transaction SumUp
 router.post('/valider', requireCashier, async (req, res) => {
   const pool = req.app.locals.pool;
   const { client_id, sumup_transaction_id, sumup_amount, sumup_products } = req.body;
