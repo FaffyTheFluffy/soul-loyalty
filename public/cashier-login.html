@@ -24,11 +24,29 @@
     .login-title { font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
     .login-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    input[type="password"] {
-      width: 100%; padding: 16px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.3em; text-align: center; outline: none; border-radius: 0; -webkit-appearance: none; appearance: none; transition: border-color 0.15s; margin-bottom: 16px;
+    .pw-wrap { position: relative; margin-bottom: 16px; }
+    input[type="password"], input[type="text"].pw-field {
+      width: 100%; padding: 16px 48px 16px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.3em; text-align: center; outline: none; border-radius: 0; -webkit-appearance: none; appearance: none; transition: border-color 0.15s;
     }
-    input[type="password"]:focus { border-color: var(--black); }
-    input::placeholder { color: #ccc; letter-spacing: 0.1em; font-size: 13px; font-weight: 400; }
+    .pw-wrap input:focus { border-color: var(--black); }
+    .pw-wrap input::placeholder { color: #ccc; letter-spacing: 0.1em; font-size: 13px; font-weight: 400; }
+
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .toggle-pw:hover { color: var(--black); }
 
     .btn-login { width: 100%; padding: 18px; background: var(--yellow); color: var(--white); border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
     .btn-login:hover { opacity: 0.9; }
@@ -48,13 +66,27 @@
     <div class="login-box">
       <p class="login-title">Mot de passe</p>
       <form method="POST" action="/caisse/login">
-        <input type="password" name="password" placeholder="••••••••" autofocus>
+        <div class="pw-wrap">
+          <input type="password" name="password" id="pw-input" placeholder="••••••••" autofocus>
+          <button type="button" class="toggle-pw" id="toggle-btn" onclick="togglePw()">Voir</button>
+        </div>
         <button type="submit" class="btn-login">Accéder à la caisse →</button>
         <p class="error" id="err">Mot de passe incorrect.</p>
       </form>
     </div>
   </div>
   <script>
+    function togglePw() {
+      const input = document.getElementById('pw-input');
+      const btn = document.getElementById('toggle-btn');
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Masquer';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Voir';
+      }
+    }
     if (window.location.search.includes('error')) document.getElementById('err').style.display = 'block';
   </script>
 </body>
