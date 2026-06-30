@@ -148,7 +148,7 @@
         </div>
         <div class="client-card-actions">
           <button class="btn-detail" onclick="openModal('${c.id}', '${(c.first_name + ' ' + c.last_name).replace(/'/g,"\\'")}', ${c.visit_count})">Historique</button>
-          <button class="btn-deactivate" onclick="deactivate('${c.id}')">Supprimer</button>
+          <button class="btn-deactivate" onclick="deactivate('${c.id}')">Annuler la carte</button>
         </div>
       </div>
     `).join('');
@@ -175,7 +175,7 @@
   function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
   async function deactivate(id) {
-    if (!confirm('Supprimer ce membre ?')) return;
+    if (!confirm('Annuler la carte de ce membre ? Son email/nom resteront bloqués pour empêcher une réinscription.')) return;
     await fetch(`/admin/clients/${id}/desactiver`, { method: 'POST' });
     loadClients(); loadStats();
   }
