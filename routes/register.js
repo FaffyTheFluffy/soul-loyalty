@@ -15,16 +15,22 @@ router.post('/inscription', async (req, res) => {
     return res.status(400).json({ error: 'Champs obligatoires manquants.' });
   }
 
-  if (email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    return res.status(400).json({ error: 'Adresse email invalide.' });
-  }
-
   try {
+    // Vérifie les doublons sur email (si fourni) et sur nom+prénom,
+    // même si le client est désactivé, pour empêcher la recréation d'une carte.
     if (email) {
-      const existing = await pool.query('SELECT id FROM loyalty_clients WHERE email = $1', [email]);
-      if (existing.rows.length > 0) {
+      const existingEmail = await pool.query('SELECT id FROM loyalty_clients WHERE LOWER(email) = LOWER($1)', [email]);
+      if (existingEmail.rows.length > 0) {
         return res.status(409).json({ error: 'Cette adresse email est déjà inscrite.' });
       }
+    }
+
+    const existingName = await pool.query(
+      'SELECT id FROM loyalty_clients WHERE LOWER(first_name) = LOWER($1) AND LOWER(last_name) = LOWER($2)',
+      [first_name, last_name]
+    );
+    if (existingName.rows.length > 0) {
+      return res.status(409).json({ error: 'Une carte existe déjà pour ce nom et prénom.' });
     }
 
     const qrCode = uuidv4();
