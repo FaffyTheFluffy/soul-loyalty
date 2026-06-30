@@ -14,19 +14,15 @@
     .header { background: var(--white); padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
     .header-logo { height: 36px; width: auto; display: block; }
     .header-label { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); }
-
     .hero-band { background: var(--yellow); padding: 18px 28px; }
     .hero-text { font-size: clamp(16px, 4.5vw, 22px); font-weight: 900; font-style: italic; color: var(--white); line-height: 1.2; text-transform: uppercase; letter-spacing: -0.01em; }
-
     .form-wrap { flex: 1; padding: 36px 28px 60px; max-width: 520px; width: 100%; }
     .form-section { margin-bottom: 36px; }
     .section-label { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
     .field { margin-bottom: 18px; }
     .field label { display: block; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
     .field label .req { color: var(--black); }
-
     input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
       width: 100%; padding: 13px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black);
       font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 500; outline: none; border-radius: 0;
@@ -36,7 +32,6 @@
     input::placeholder { color: #ccc; font-weight: 400; }
     select { cursor: pointer; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
     .rgpd-box { background: var(--light); border-left: 3px solid var(--yellow); padding: 20px; margin-bottom: 28px; }
     .rgpd-text { font-size: 11px; font-weight: 400; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px; }
     .rgpd-check { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
@@ -48,156 +43,28 @@
       cursor: pointer; flex-shrink: 0; margin-top: 2px; accent-color: var(--black);
     }
     .rgpd-check span { font-size: 11px; font-weight: 600; color: var(--black); line-height: 1.6; }
-
     .btn-submit { width: 100%; padding: 18px; background: var(--yellow); color: var(--white); border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
     .btn-submit:hover { opacity: 0.9; }
     .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-
     .error-msg { background: #fff0f0; border-left: 3px solid #ff4444; color: #cc0000; padding: 12px 16px; font-size: 11px; font-weight: 600; margin-bottom: 20px; display: none; }
 
-    /* SUCCESS — CARTE */
-    #success-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      background: var(--white);
-      padding-bottom: 48px;
-    }
-
-    .success-top-band {
-      width: 100%;
-      background: var(--yellow);
-      padding: 14px 28px;
-    }
-
-    .success-top-text {
-      font-size: 13px; font-weight: 900; font-style: italic;
-      color: var(--white); text-transform: uppercase; letter-spacing: 0.05em;
-    }
-
-    .success-body {
-      padding: 36px 28px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .success-msg {
-      font-size: 13px; font-weight: 500; color: var(--text-muted);
-      line-height: 1.7; margin-bottom: 32px;
-    }
+    /* SUCCESS */
+    #success-screen { display: none; flex-direction: column; align-items: center; min-height: 100vh; background: var(--white); padding-bottom: 60px; }
+    .success-top-band { width: 100%; background: var(--yellow); padding: 14px 28px; }
+    .success-top-text { font-size: 13px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
+    .success-body { padding: 32px 20px 0; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 400px; }
+    .success-msg { font-size: 13px; font-weight: 500; color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
     .success-msg strong { color: var(--black); font-weight: 800; }
 
-    /* LA CARTE */
-    .loyalty-card {
-      width: 100%;
-      max-width: 340px;
-      background: var(--yellow);
-      padding: 28px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
+    /* Canvas 9:16 */
+    #card-canvas { display: block; width: 100%; max-width: 360px; height: auto; }
+    .canvas-wrap { margin-bottom: 20px; width: 100%; display: flex; justify-content: center; }
 
-    /* Cercle décoratif en arrière-plan */
-    .loyalty-card::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      right: -60px;
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      border: 40px solid rgba(255,255,255,0.1);
-      pointer-events: none;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-
-    .card-logo {
-      height: 32px;
-      width: auto;
-    }
-
-    .card-label {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--white);
-      opacity: 0.8;
-      text-align: right;
-    }
-
-    .card-name {
-      font-size: clamp(22px, 7vw, 30px);
-      font-weight: 900;
-      font-style: italic;
-      color: var(--white);
-      text-transform: uppercase;
-      letter-spacing: -0.02em;
-      line-height: 1;
-    }
-
-    .card-qr {
-      background: var(--white);
-      padding: 12px;
-      width: fit-content;
-      align-self: center;
-    }
-
-    #qr-image {
-      width: 160px;
-      height: 160px;
-      display: block;
-    }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .card-discount {
-      font-size: 28px;
-      font-weight: 900;
-      font-style: italic;
-      color: var(--white);
-      line-height: 1;
-      letter-spacing: -0.02em;
-    }
-
-    .card-discount-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--white);
-      opacity: 0.8;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      line-height: 1.4;
-    }
-
-    .save-hint { font-size: 9px; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; color: var(--black); margin-bottom: 6px; }
-    .save-sub { font-size: 12px; font-weight: 400; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
-
-    .btn-save { padding: 15px 32px; background: var(--yellow); border: none; color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; }
-    .btn-save:hover { opacity: 0.85; }
+    .save-instruction { background: var(--yellow); color: var(--white); font-size: 12px; font-weight: 700; font-style: italic; padding: 14px 20px; text-align: center; line-height: 1.6; width: 100%; max-width: 360px; margin-top: 4px; }
   </style>
 </head>
 <body>
 
-  <!-- FORMULAIRE -->
   <div id="form-screen">
     <div class="header">
       <img src="/SOUL_LOGO_noir.png" alt="SŌUL" class="header-logo">
@@ -237,41 +104,34 @@
     </div>
   </div>
 
-  <!-- SUCCESS — CARTE -->
   <div id="success-screen">
     <div class="success-top-band">
       <p class="success-top-text">Votre carte est prête ✓</p>
     </div>
     <div class="success-body">
-      <p class="success-msg" style="margin-top:28px">
+      <p class="success-msg">
         Présentez cette carte à chaque visite<br>pour bénéficier de <strong>−10%</strong> sur votre commande.
       </p>
-
-      <!-- CARTE JAUNE -->
-      <div class="loyalty-card" id="loyalty-card">
-        <div class="card-header">
-          <img src="/SOUL_LOGO_white.png" alt="SŌUL" class="card-logo" onerror="this.style.display='none'; document.getElementById('card-logo-text').style.display='block'">
-          <span id="card-logo-text" style="display:none;font-size:22px;font-weight:900;font-style:italic;color:white;letter-spacing:-0.02em">SŌUL</span>
-          <span class="card-label">Carte<br>Privilège</span>
-        </div>
-        <p class="card-name" id="card-name">—</p>
-        <div class="card-qr">
-          <img id="qr-image" src="" alt="QR Code">
-        </div>
-        <div class="card-footer">
-          <div class="card-discount">−10%</div>
-          <div class="card-discount-label">À chaque<br>visite</div>
-        </div>
+      <div class="canvas-wrap">
+        <canvas id="card-canvas" width="900" height="1600"></canvas>
       </div>
-
-      <p class="save-hint" style="margin-top:8px">↓ Enregistrez votre carte</p>
-      <p class="save-sub">Faites une capture d'écran<br>ou téléchargez l'image ci-dessous.</p>
-      <button class="btn-save" onclick="downloadQR()">Télécharger le QR code</button>
+      <div class="save-instruction">
+        Appuyez longuement sur la carte<br>→ "Enregistrer l'image" pour l'ajouter à vos photos
+      </div>
     </div>
   </div>
 
   <script>
     let qrDataUrl = '';
+    let shortCode = '';
+
+    // Génère un code court 4 caractères alphanumérique
+    function generateShortCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+      return code;
+    }
 
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -280,8 +140,7 @@
       errEl.style.display = 'none';
       btn.disabled = true;
       btn.textContent = 'Création en cours…';
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
+      const data = Object.fromEntries(new FormData(e.target).entries());
       try {
         const res = await fetch('/inscription', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         const json = await res.json();
@@ -293,10 +152,11 @@
           return;
         }
         qrDataUrl = json.qrImageUrl;
-        document.getElementById('qr-image').src = qrDataUrl;
-        document.getElementById('card-name').textContent = json.firstName;
+        shortCode = json.qrCode.slice(0, 4).toUpperCase();
+        const firstName = (data.first_name + ' ' + data.last_name).toUpperCase();
         document.getElementById('form-screen').style.display = 'none';
         document.getElementById('success-screen').style.display = 'flex';
+        drawCard(qrDataUrl, firstName, shortCode);
       } catch (err) {
         errEl.textContent = 'Erreur de connexion. Réessayez.';
         errEl.style.display = 'block';
@@ -305,11 +165,106 @@
       }
     });
 
-    function downloadQR() {
-      const a = document.createElement('a');
-      a.href = qrDataUrl;
-      a.download = 'soul-carte-privilege.png';
-      a.click();
+    function drawCard(qrSrc, fullName, code) {
+      const canvas = document.getElementById('card-canvas');
+      const ctx = canvas.getContext('2d');
+      const W = 900, H = 1600;
+
+      // Fond jaune plein
+      ctx.fillStyle = '#F2EA3C';
+      ctx.fillRect(0, 0, W, H);
+
+      // Cercle déco haut droite
+      ctx.beginPath();
+      ctx.arc(W + 80, -80, 420, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 80;
+      ctx.stroke();
+
+      // Cercle déco bas gauche
+      ctx.beginPath();
+      ctx.arc(-80, H + 80, 380, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 60;
+      ctx.stroke();
+
+      // LOGO SŌUL (texte)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '900 italic 130px Montserrat, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('SŌUL', 70, 170);
+
+      // Label "CARTE PRIVILÈGE"
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.font = '700 22px Montserrat, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText('CARTE PRIVILÈGE', W - 70, 100);
+
+      // Ligne séparatrice
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.fillRect(70, 200, W - 140, 2);
+
+      // Prénom + Nom
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '900 italic 80px Montserrat, sans-serif';
+      ctx.textAlign = 'left';
+      // Adapter la taille si le nom est long
+      const nameWidth = ctx.measureText(fullName).width;
+      if (nameWidth > W - 140) {
+        ctx.font = '900 italic 56px Montserrat, sans-serif';
+      }
+      ctx.fillText(fullName, 70, 310);
+
+      // QR CODE — centré, grand
+      const qrImg = new Image();
+      qrImg.onload = function() {
+        const qrSize = 580;
+        const qrX = (W - qrSize) / 2;
+        const qrY = 380;
+
+        // Fond blanc arrondi pour QR
+        ctx.fillStyle = '#FFFFFF';
+        roundRect(ctx, qrX - 20, qrY - 20, qrSize + 40, qrSize + 40, 16);
+        ctx.fill();
+
+        ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+        // Code de secours
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '800 28px Montserrat, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('CODE DE SECOURS', W / 2, qrY + qrSize + 80);
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '900 italic 100px Montserrat, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(code, W / 2, qrY + qrSize + 190);
+
+        // Ligne bas
+        ctx.fillStyle = 'rgba(255,255,255,0.25)';
+        ctx.fillRect(70, H - 120, W - 140, 2);
+
+        // Soul en bas
+        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        ctx.font = '700 24px Montserrat, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('soul-loyalty-production.up.railway.app', W / 2, H - 70);
+      };
+      qrImg.src = qrSrc;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
     }
   </script>
 </body>
