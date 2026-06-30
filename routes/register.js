@@ -15,6 +15,10 @@ router.post('/inscription', async (req, res) => {
     return res.status(400).json({ error: 'Champs obligatoires manquants.' });
   }
 
+  if (email && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+    return res.status(400).json({ error: 'Adresse email invalide.' });
+  }
+
   try {
     if (email) {
       const existing = await pool.query('SELECT id FROM loyalty_clients WHERE email = $1', [email]);
