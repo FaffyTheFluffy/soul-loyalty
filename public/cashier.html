@@ -12,18 +12,15 @@
     :root { --yellow: #F2EA3C; --black: #0A0A0A; --white: #FFFFFF; --light: #F5F5F5; --text-muted: #888; --border: #E0E0E0; --green: #1a7a4a; }
     body { background: var(--white); color: var(--black); font-family: 'Montserrat', sans-serif; min-height: 100vh; padding-bottom: 40px; }
 
-    /* HEADER */
     .header { background: var(--white); padding: 20px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
     .header-logo { height: 32px; width: auto; }
     .header-links { display: flex; gap: 20px; }
     .header-links a { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; }
     .header-links a:hover { color: var(--black); }
 
-    /* BAND */
     .hero-band { background: var(--yellow); padding: 14px 20px; }
     .hero-text { font-size: 13px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* SCANNER */
     .scanner-section { padding: 24px 20px 16px; }
     .section-title { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -32,35 +29,31 @@
     #reader video { display: block; }
 
     .scan-alt { margin-top: 12px; display: flex; gap: 8px; }
-    .scan-alt input { flex: 1; padding: 12px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 500; outline: none; }
+    .scan-alt input { flex: 1; padding: 12px 14px; background: var(--white); border: 1.5px solid var(--border); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 500; outline: none; text-transform: uppercase; }
     .scan-alt input:focus { border-color: var(--black); }
     .scan-alt button { padding: 12px 20px; background: var(--black); color: var(--yellow); border: none; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 800; font-style: italic; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
+    .scan-hint { font-size: 10px; color: var(--text-muted); margin-top: 8px; font-weight: 500; }
 
-    /* CLIENT CARD */
     #client-card { display: none; margin: 16px 20px 0; background: var(--light); border-left: 4px solid var(--yellow); padding: 24px; }
     .client-name { font-size: clamp(24px, 7vw, 36px); font-weight: 900; font-style: italic; color: var(--black); text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 4px; }
     .client-visits { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 20px; }
 
     .discount-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--yellow); color: var(--white); padding: 10px 16px; font-size: 12px; font-weight: 900; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; }
 
-    /* TRANSACTIONS */
     .tx-section { margin-bottom: 20px; }
     .tx-label { font-size: 9px; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
     .tx-list { display: flex; flex-direction: column; gap: 8px; }
     .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--white); border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.15s; }
-    .tx-item.selected { border-color: var(--black); background: var(--white); }
+    .tx-item.selected { border-color: var(--black); }
     .tx-products { font-size: 13px; font-weight: 600; color: var(--black); }
     .tx-meta { font-size: 10px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
     .tx-amount { font-size: 16px; font-weight: 800; color: var(--black); }
-    .tx-none { font-size: 12px; font-weight: 500; color: var(--text-muted); font-style: italic; padding: 10px 0; }
 
-    /* BUTTONS */
     .btn-validate { width: 100%; padding: 18px; background: var(--black); color: var(--yellow); border: none; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: opacity 0.15s; margin-bottom: 10px; }
     .btn-validate:hover { opacity: 0.85; }
     .btn-validate:disabled { opacity: 0.3; cursor: not-allowed; }
     .btn-cancel { width: 100%; padding: 13px; background: transparent; color: var(--text-muted); border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; }
 
-    /* TOAST */
     #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--black); color: var(--yellow); padding: 14px 28px; font-size: 12px; font-weight: 800; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; display: none; z-index: 999; }
   </style>
 </head>
@@ -82,9 +75,10 @@
     <p class="section-title">Caméra</p>
     <div id="reader"></div>
     <div class="scan-alt">
-      <input type="text" id="manual-input" placeholder="Ou saisir le code manuellement…">
+      <input type="text" id="manual-input" placeholder="Code à 4 caractères…" maxlength="4">
       <button onclick="manualScan()">OK</button>
     </div>
+    <p class="scan-hint">Code de secours imprimé sur la carte du client</p>
   </div>
 
   <div id="client-card">
@@ -92,11 +86,9 @@
     <p class="client-visits" id="client-visits">—</p>
     <div class="discount-badge">✓ −10% à appliquer en caisse</div>
 
-    <div class="tx-section">
+    <div class="tx-section" id="tx-section">
       <p class="tx-label">Transaction SumUp la plus proche</p>
-      <div class="tx-list" id="tx-list">
-        <p class="tx-none">Chargement…</p>
-      </div>
+      <div class="tx-list" id="tx-list"></div>
     </div>
 
     <button class="btn-validate" id="btn-validate" onclick="validateVisit()">✓ Valider la visite →</button>
@@ -132,15 +124,12 @@
     function manualScan() {
       const val = document.getElementById('manual-input').value.trim();
       if (!val) return;
-      let qrCode = val;
-      const match = val.match(/\/api\/client\/([a-f0-9-]{36})/);
-      if (match) qrCode = match[1];
-      lookupClient(qrCode);
+      lookupClient(val);
     }
 
-    async function lookupClient(qrCode) {
+    async function lookupClient(code) {
       try {
-        const res = await fetch(`/caisse/scan/${qrCode}`);
+        const res = await fetch(`/caisse/scan/${code}`);
         const data = await res.json();
         if (!res.ok) { alert(data.error || 'Carte non reconnue.'); return; }
 
@@ -164,11 +153,16 @@
     }
 
     function renderTransactions(txList, scanTimeStr) {
+      const section = document.getElementById('tx-section');
       const container = document.getElementById('tx-list');
+
       if (!txList || txList.length === 0) {
-        container.innerHTML = '<p class="tx-none">Aucune transaction SumUp récente trouvée.</p>';
+        // Masquer complètement la section si aucune transaction
+        section.style.display = 'none';
         return;
       }
+      section.style.display = 'block';
+
       const scanDt = new Date(scanTimeStr);
       const sorted = txList.slice().sort((a, b) => {
         const dA = Math.abs(new Date(a.timestamp || a.created_at) - scanDt);
@@ -242,7 +236,6 @@
       if (!iso) return '—';
       return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
     }
-
     function formatTime(dt) {
       return dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     }
