@@ -9,55 +9,72 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --yellow: #F2EA3C; --black: #0A0A0A; --white: #FFFFFF; --light: #F5F5F5; --text-muted: #888; --border: #E0E0E0; }
-    body { background: var(--white); color: var(--black); font-family: 'Montserrat', sans-serif; min-height: 100vh; }
+    body { background: var(--white); color: var(--black); font-family: 'Montserrat', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-    .header { background: var(--white); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-    .header-logo { height: 32px; width: auto; }
-    .header-links a { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; margin-left: 20px; }
+    .header { background: var(--white); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+    .header-logo { height: 28px; width: auto; }
+    .header-links a { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; margin-left: 16px; }
     .header-links a:hover { color: var(--black); }
 
-    .hero-band { background: var(--yellow); padding: 14px 24px; }
-    .hero-text { font-size: 13px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
+    .hero-band { background: var(--yellow); padding: 12px 20px; }
+    .hero-text { font-size: 12px; font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    .main { padding: 32px 24px; max-width: 960px; margin: 0 auto; }
+    .main { padding: 20px 16px; max-width: 960px; margin: 0 auto; }
 
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 40px; }
-    .stat-card { background: var(--light); border-left: 4px solid var(--yellow); padding: 20px 18px; }
-    .stat-value { font-size: 40px; font-weight: 900; font-style: italic; color: var(--black); line-height: 1; }
-    .stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; }
+    /* STATS - empilées sur mobile */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 28px; }
+    .stat-card { background: var(--light); border-left: 4px solid var(--yellow); padding: 14px 10px; }
+    .stat-value { font-size: 26px; font-weight: 900; font-style: italic; color: var(--black); line-height: 1; }
+    .stat-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; line-height: 1.3; }
 
-    /* SECTION */
-    .section-title { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+    .section-title { font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
     .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* TABLE */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    th { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); padding: 10px 12px; text-align: left; border-bottom: 1.5px solid var(--border); }
-    td { padding: 14px 12px; font-size: 13px; border-bottom: 1px solid var(--light); vertical-align: top; }
-    tr:hover td { background: var(--light); }
-    .client-full { font-weight: 700; font-size: 13px; }
-    .client-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; font-weight: 400; }
-    .badge-visits { display: inline-block; background: var(--yellow); color: var(--white); font-size: 11px; font-weight: 800; font-style: italic; padding: 3px 10px; }
-    .btn-detail { font-size: 10px; font-weight: 700; color: var(--black); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; letter-spacing: 0.05em; }
-    .btn-deactivate { font-size: 10px; font-weight: 700; color: #cc0000; background: none; border: none; cursor: pointer; padding: 0; margin-left: 12px; letter-spacing: 0.05em; }
+    /* CARTES CLIENT au lieu de table sur mobile */
+    .client-list { display: flex; flex-direction: column; gap: 10px; }
+    .client-card {
+      border: 1.5px solid var(--border);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .client-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .client-full { font-weight: 800; font-size: 15px; line-height: 1.2; word-break: break-word; }
+    .client-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; font-weight: 500; word-break: break-all; }
+    .badge-visits { flex-shrink: 0; background: var(--yellow); color: var(--white); font-size: 13px; font-weight: 800; font-style: italic; padding: 4px 12px; }
+
+    .client-card-info { display: flex; gap: 16px; font-size: 11px; color: var(--text-muted); font-weight: 600; flex-wrap: wrap; }
+    .client-card-info strong { color: var(--black); font-weight: 700; }
+
+    .client-card-actions { display: flex; gap: 16px; margin-top: 4px; }
+    .btn-detail { font-size: 11px; font-weight: 700; color: var(--black); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; letter-spacing: 0.05em; }
+    .btn-deactivate { font-size: 11px; font-weight: 700; color: #cc0000; background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.05em; }
 
     /* MODAL */
-    #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     #modal.open { display: flex; }
     .modal-box { background: var(--white); max-width: 560px; width: 100%; max-height: 80vh; overflow-y: auto; }
-    .modal-header { background: var(--yellow); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
-    .modal-title { font-size: clamp(20px, 5vw, 28px); font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: -0.01em; }
-    .modal-sub { font-size: 10px; font-weight: 700; color: var(--white); letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; }
-    .modal-body { padding: 24px; }
-    .visit-item { padding: 14px 0; border-bottom: 1px solid var(--light); }
-    .visit-date { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
+    .modal-header { background: var(--yellow); padding: 18px 20px; }
+    .modal-title { font-size: clamp(18px, 6vw, 26px); font-weight: 900; font-style: italic; color: var(--white); text-transform: uppercase; letter-spacing: -0.01em; word-break: break-word; }
+    .modal-sub { font-size: 10px; font-weight: 700; color: var(--white); letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
+    .modal-body { padding: 20px; }
+    .visit-item { padding: 12px 0; border-bottom: 1px solid var(--light); }
+    .visit-date { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
     .visit-products { font-size: 13px; font-weight: 600; color: var(--black); margin-top: 3px; }
     .visit-amount { font-size: 13px; font-weight: 800; font-style: italic; color: var(--black); margin-top: 2px; }
-    .modal-close { margin-top: 20px; padding: 14px 24px; background: var(--black); color: var(--yellow); border: none; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
+    .modal-close { margin-top: 16px; padding: 13px 24px; width: 100%; background: var(--black); color: var(--yellow); border: none; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 900; font-style: italic; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; }
     .no-visits { font-size: 13px; color: var(--text-muted); font-style: italic; }
-    .loading { text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px; font-weight: 500; }
+    .loading { text-align: center; padding: 30px; color: var(--text-muted); font-size: 12px; font-weight: 500; }
+    .empty-state { text-align: center; padding: 30px 16px; color: var(--text-muted); font-size: 13px; font-style: italic; }
+
+    @media (min-width: 600px) {
+      .stat-value { font-size: 36px; }
+      .stat-label { font-size: 9px; }
+      .client-card { flex-direction: row; align-items: center; justify-content: space-between; }
+      .client-card-top { flex: 1; }
+      .client-card-info { flex: 1; }
+    }
   </style>
 </head>
 <body>
@@ -75,38 +92,23 @@
 </div>
 
 <div class="main">
-  <div class="stats-grid" id="stats-grid">
+  <div class="stats-grid">
     <div class="stat-card"><div class="stat-value" id="s-clients">—</div><div class="stat-label">Membres actifs</div></div>
     <div class="stat-card"><div class="stat-value" id="s-visits">—</div><div class="stat-label">Visites totales</div></div>
     <div class="stat-card"><div class="stat-value">−10%</div><div class="stat-label">Remise appliquée</div></div>
   </div>
 
   <p class="section-title">Membres</p>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Client</th>
-          <th>Visites</th>
-          <th>Dernière visite</th>
-          <th>Dépensé</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="clients-body">
-        <tr><td colspan="5" class="loading">Chargement…</td></tr>
-      </tbody>
-    </table>
+  <div class="client-list" id="clients-list">
+    <p class="loading">Chargement…</p>
   </div>
 </div>
 
 <div id="modal">
   <div class="modal-box">
     <div class="modal-header">
-      <div>
-        <p class="modal-title" id="modal-name">—</p>
-        <p class="modal-sub" id="modal-sub">Historique des visites</p>
-      </div>
+      <p class="modal-title" id="modal-name">—</p>
+      <p class="modal-sub" id="modal-sub">Historique des visites</p>
     </div>
     <div class="modal-body">
       <div id="modal-visits"></div>
@@ -126,25 +128,29 @@
   async function loadClients() {
     const res = await fetch('/admin/clients');
     const clients = await res.json();
-    const tbody = document.getElementById('clients-body');
+    const container = document.getElementById('clients-list');
     if (!clients.length) {
-      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted);font-size:13px;font-style:italic;padding:20px 12px">Aucun membre inscrit.</td></tr>';
+      container.innerHTML = '<p class="empty-state">Aucun membre inscrit.</p>';
       return;
     }
-    tbody.innerHTML = clients.map(c => `
-      <tr>
-        <td>
-          <div class="client-full">${c.first_name} ${c.last_name}</div>
-          <div class="client-meta">${c.email || ''} ${c.phone ? '· ' + c.phone : ''}</div>
-        </td>
-        <td><span class="badge-visits">${c.visit_count}</span></td>
-        <td style="font-size:12px;color:var(--text-muted);font-weight:500">${c.last_visit ? formatDate(c.last_visit) : '—'}</td>
-        <td style="font-size:13px;font-weight:700">${c.total_spent ? parseFloat(c.total_spent).toFixed(2) + ' €' : '—'}</td>
-        <td>
-          <button class="btn-detail" onclick="openModal('${c.id}', '${c.first_name} ${c.last_name}', ${c.visit_count})">Historique</button>
+    container.innerHTML = clients.map(c => `
+      <div class="client-card">
+        <div class="client-card-top">
+          <div>
+            <div class="client-full">${c.first_name} ${c.last_name}</div>
+            <div class="client-meta">${c.email || ''}${c.phone ? ' · ' + c.phone : ''}</div>
+          </div>
+          <span class="badge-visits">${c.visit_count}</span>
+        </div>
+        <div class="client-card-info">
+          <span><strong>Dernière visite :</strong> ${c.last_visit ? formatDate(c.last_visit) : '—'}</span>
+          <span><strong>Dépensé :</strong> ${c.total_spent ? parseFloat(c.total_spent).toFixed(2) + ' €' : '—'}</span>
+        </div>
+        <div class="client-card-actions">
+          <button class="btn-detail" onclick="openModal('${c.id}', '${(c.first_name + ' ' + c.last_name).replace(/'/g,"\\'")}', ${c.visit_count})">Historique</button>
           <button class="btn-deactivate" onclick="deactivate('${c.id}')">Supprimer</button>
-        </td>
-      </tr>
+        </div>
+      </div>
     `).join('');
   }
 
@@ -174,7 +180,7 @@
     loadClients(); loadStats();
   }
 
-  function formatDate(iso) { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }); }
+  function formatDate(iso) { return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); }
   function formatDateFull(iso) { return new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
 
   loadStats();
