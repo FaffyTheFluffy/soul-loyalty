@@ -213,6 +213,7 @@
           ctx.font = `900 italic ${fontSize}px Montserrat, sans-serif`;
         }
         ctx.fillText(fullName, W / 2, 330);
+        window.__nameFontSize = fontSize;
 
         // QR CODE
         const qrImg = new Image();
@@ -227,9 +228,6 @@
 
           ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
-          ctx.fillStyle = 'rgba(10,10,10,0.2)';
-          ctx.fillRect(70, qrY + qrSize + 60, W - 140, 2);
-
           ctx.fillStyle = 'rgba(10,10,10,0.65)';
           ctx.font = '700 26px Montserrat, sans-serif';
           ctx.textAlign = 'center';
@@ -242,17 +240,13 @@
         qrImg.src = qrSrc;
       }
 
-      // Charger le logo NOIR, centré, taille réduite de 20%
+      // Charger le logo NOIR, centré, environ moitié de la hauteur du nom
       const logo = new Image();
       logo.onload = function() {
-        const logoH = 144; // 180 * 0.8 (taille de base augmentée puis réduite de 20%)
+        const logoH = 38; // environ la moitié de la taille du texte du nom (~76px)
         const logoW = (logo.width / logo.height) * logoH;
         const logoX = (W - logoW) / 2;
-        ctx.drawImage(logo, logoX, 70, logoW, logoH);
-
-        // Ligne séparatrice sous le logo
-        ctx.fillStyle = 'rgba(10,10,10,0.2)';
-        ctx.fillRect(70, 240, W - 140, 2);
+        ctx.drawImage(logo, logoX, 90, logoW, logoH);
 
         drawRest();
       };
@@ -260,12 +254,9 @@
       logo.onerror = function() {
         // Fallback texte noir centré si logo ne charge pas
         ctx.fillStyle = '#0A0A0A';
-        ctx.font = '900 italic 104px Montserrat, sans-serif';
+        ctx.font = '900 italic 38px Montserrat, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('SŌUL', W / 2, 190);
-
-        ctx.fillStyle = 'rgba(10,10,10,0.2)';
-        ctx.fillRect(70, 240, W - 140, 2);
+        ctx.fillText('SŌUL', W / 2, 120);
 
         drawRest();
       };
