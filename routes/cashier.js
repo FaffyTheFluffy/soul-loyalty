@@ -82,7 +82,7 @@ router.get('/scan/:code', (req, res, next) => {
       );
       if (sumupRes.ok) {
         const data = await sumupRes.json();
-        recentTransactions = (data.items || []).filter(t => t.status === 'SUCCESSFUL');
+        recentTransactions = (data.items || []).filter(t => ['SUCCESSFUL', 'PAID_OUT'].includes(t.status) && parseFloat(t.amount) > 0);
       }
     } catch (e) {
       console.error('SumUp API error:', e.message);
