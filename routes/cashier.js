@@ -66,7 +66,7 @@ router.get('/scan/:code', requireCashier, async (req, res) => {
       const fiveMinAgo = new Date(now - 5 * 60 * 1000).toISOString();
       const sumupRes = await fetch(
         `https://api.sumup.com/v2.1/merchants/${process.env.SUMUP_MERCHANT_CODE}/transactions/history?newest_time=${now.toISOString()}&oldest_time=${fiveMinAgo}&limit=5`,
-        { headers: { Authorization: `Bearer ${process.env.SUMUP_API_KEY}` } }
+        { headers: { Authorization: `Bearer ${req.session.sumup_access_token || process.env.SUMUP_API_KEY}` } }
       );
       if (sumupRes.ok) {
         const data = await sumupRes.json();
