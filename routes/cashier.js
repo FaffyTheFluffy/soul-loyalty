@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const fetch = require('node-fetch');
 
-function requireCashier(req, res, next) {
-  if (req.session.cashier) return next();
+function requireAdmin(req, res, next) {
+  if (req.session.admin) return next();
   res.redirect('/caisse/login');
 }
 
@@ -27,19 +27,21 @@ router.get('/logout', (req, res) => {
   res.redirect('/caisse/login');
 });
 
+// Caisse accessible sans mot de passe
 router.get('/', (req, res) => {
-  req.session.cashier = true; // accès libre à la caisse
+  req.session.cashier = true;
   res.sendFile(require('path').join(__dirname, '../public/cashier.html'));
 });
 
 // Scan QR ou code court → profil client
-router.get('/scan/:code', requireCashier, async (req, res) => {
+router.get('/scan/:code', (req, res, next) => {
+  req.session.cashier = true;
+  next();
+}, async (req, res) => {
   const pool = req.app.locals.pool;
   const { code } = req.params;
 
   try {
-    // Si le code fait 36 caractères (UUID complet) -> recherche par qr_code
-    // Sinon -> recherche par short_code (4 caractères)
     const isFullUuid = code.length === 36;
     const query = isFullUuid
       ? `SELECT c.*, COUNT(v.id) as visit_count, MAX(v.visited_at) as last_visit
@@ -63,18 +65,17 @@ router.get('/scan/:code', requireCashier, async (req, res) => {
 
     let recentTransactions = [];
     try {
-      // Récupérer le token SumUp depuis la base de données
+      // Récupérer le token SumUp depuis la base
       const tokenResult = await pool.query('SELECT access_token, expires_at FROM sumup_tokens WHERE id = 1');
-      let sumupToken = process.env.SUMUP_API_KEY; // fallback clé API
+      let sumupToken = process.env.SUMUP_API_KEY;
       if (tokenResult.rows.length > 0 && new Date(tokenResult.rows[0].expires_at) > new Date()) {
         sumupToken = tokenResult.rows[0].access_token;
       }
 
-      // On récupère les transactions des 2 dernières minutes AVANT le scan
-      // + 5 minutes après — pour couvrir les deux cas
       const scanTime = new Date();
       const twoMinBefore = new Date(scanTime.getTime() - 2 * 60 * 1000).toISOString();
       const fiveMinAfter = new Date(scanTime.getTime() + 5 * 60 * 1000).toISOString();
+
       const sumupRes = await fetch(
         `https://api.sumup.com/v2.1/merchants/${process.env.SUMUP_MERCHANT_CODE}/transactions/history?newest_time=${fiveMinAfter}&oldest_time=${twoMinBefore}&limit=10`,
         { headers: { Authorization: `Bearer ${sumupToken}` } }
@@ -105,7 +106,8 @@ router.get('/scan/:code', requireCashier, async (req, res) => {
   }
 });
 
-router.post('/valider', requireCashier, async (req, res) => {
+// Valider une visite
+router.post('/valider', async (req, res) => {
   const pool = req.app.locals.pool;
   const { client_id, sumup_transaction_id, sumup_amount, sumup_products } = req.body;
 
