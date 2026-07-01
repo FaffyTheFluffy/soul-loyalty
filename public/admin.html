@@ -91,6 +91,10 @@
   <p class="hero-text">Admin — Fidélité</p>
 </div>
 
+<div id="sumup-banner" style="display:none;background:#fff8e1;border-left:4px solid #F2EA3C;padding:14px 20px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <span id="sumup-status-text">⚠️ SumUp non connecté — les commandes ne seront pas récupérées.</span>
+  <a href="/auth/sumup" style="background:#F2EA3C;color:#0A0A0A;padding:8px 16px;font-size:10px;font-weight:900;font-style:italic;letter-spacing:0.15em;text-transform:uppercase;text-decoration:none;">Connecter SumUp →</a>
+</div>
 <div class="main">
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-value" id="s-clients">—</div><div class="stat-label">Membres actifs</div></div>
@@ -185,6 +189,37 @@
 
   loadStats();
   loadClients();
+  checkSumupStatus();
+
+  async function checkSumupStatus() {
+    const banner = document.getElementById('sumup-banner');
+    const statusText = document.getElementById('sumup-status-text');
+    try {
+      const res = await fetch('/auth/sumup/token');
+      if (res.ok) {
+        banner.style.background = '#e8f5e9';
+        banner.style.borderLeftColor = '#4caf50';
+        statusText.textContent = '✅ SumUp connecté — les commandes seront récupérées automatiquement.';
+        banner.querySelector('a').textContent = 'Reconnecter SumUp';
+      } else {
+        banner.style.display = 'flex';
+      }
+      banner.style.display = 'flex';
+    } catch(e) {
+      banner.style.display = 'flex';
+    }
+  }
+
+  // Afficher message si retour OAuth
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('sumup_connected')) {
+    alert('✅ SumUp connecté avec succès !');
+    window.history.replaceState({}, '', '/admin');
+  }
+  if (params.get('sumup_error')) {
+    alert('❌ Erreur de connexion SumUp. Réessayez.');
+    window.history.replaceState({}, '', '/admin');
+  }
 </script>
 </body>
 </html>
