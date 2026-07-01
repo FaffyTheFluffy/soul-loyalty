@@ -165,9 +165,15 @@
 
       const scanDt = new Date(scanTimeStr);
       const sorted = txList.slice().sort((a, b) => {
-        const dA = Math.abs(new Date(a.timestamp || a.created_at) - scanDt);
-        const dB = Math.abs(new Date(b.timestamp || b.created_at) - scanDt);
-        return dA - dB;
+        const dtA = new Date(a.timestamp || a.created_at);
+        const dtB = new Date(b.timestamp || b.created_at);
+        const afterA = dtA >= scanDt;
+        const afterB = dtB >= scanDt;
+        // Prioriser les transactions APRÈS le scan
+        if (afterA && !afterB) return -1;
+        if (!afterA && afterB) return 1;
+        // Parmi celles après, la plus proche du scan en premier
+        return Math.abs(dtA - scanDt) - Math.abs(dtB - scanDt);
       });
       container.innerHTML = '';
       sorted.forEach((tx, i) => {
