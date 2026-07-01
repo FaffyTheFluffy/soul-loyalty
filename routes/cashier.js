@@ -27,7 +27,8 @@ router.get('/logout', (req, res) => {
   res.redirect('/caisse/login');
 });
 
-router.get('/', requireCashier, (req, res) => {
+router.get('/', (req, res) => {
+  req.session.cashier = true; // accès libre à la caisse
   res.sendFile(require('path').join(__dirname, '../public/cashier.html'));
 });
 
@@ -69,10 +70,13 @@ router.get('/scan/:code', requireCashier, async (req, res) => {
         sumupToken = tokenResult.rows[0].access_token;
       }
 
-      const now = new Date();
-      const fiveMinAgo = new Date(now - 5 * 60 * 1000).toISOString();
+      // On récupère les transactions des 2 dernières minutes AVANT le scan
+      // + 5 minutes après — pour couvrir les deux cas
+      const scanTime = new Date();
+      const twoMinBefore = new Date(scanTime.getTime() - 2 * 60 * 1000).toISOString();
+      const fiveMinAfter = new Date(scanTime.getTime() + 5 * 60 * 1000).toISOString();
       const sumupRes = await fetch(
-        `https://api.sumup.com/v2.1/merchants/${process.env.SUMUP_MERCHANT_CODE}/transactions/history?newest_time=${now.toISOString()}&oldest_time=${fiveMinAgo}&limit=5`,
+        `https://api.sumup.com/v2.1/merchants/${process.env.SUMUP_MERCHANT_CODE}/transactions/history?newest_time=${fiveMinAfter}&oldest_time=${twoMinBefore}&limit=10`,
         { headers: { Authorization: `Bearer ${sumupToken}` } }
       );
       if (sumupRes.ok) {
