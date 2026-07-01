@@ -62,11 +62,18 @@ router.get('/scan/:code', requireCashier, async (req, res) => {
 
     let recentTransactions = [];
     try {
+      // Récupérer le token SumUp depuis la base de données
+      const tokenResult = await pool.query('SELECT access_token, expires_at FROM sumup_tokens WHERE id = 1');
+      let sumupToken = process.env.SUMUP_API_KEY; // fallback clé API
+      if (tokenResult.rows.length > 0 && new Date(tokenResult.rows[0].expires_at) > new Date()) {
+        sumupToken = tokenResult.rows[0].access_token;
+      }
+
       const now = new Date();
       const fiveMinAgo = new Date(now - 5 * 60 * 1000).toISOString();
       const sumupRes = await fetch(
         `https://api.sumup.com/v2.1/merchants/${process.env.SUMUP_MERCHANT_CODE}/transactions/history?newest_time=${now.toISOString()}&oldest_time=${fiveMinAgo}&limit=5`,
-        { headers: { Authorization: `Bearer ${req.session.sumup_access_token || process.env.SUMUP_API_KEY}` } }
+        { headers: { Authorization: `Bearer ${sumupToken}` } }
       );
       if (sumupRes.ok) {
         const data = await sumupRes.json();
